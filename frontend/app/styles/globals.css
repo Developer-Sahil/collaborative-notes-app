@@ -1,0 +1,94 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-primary: #f8f9fa;
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-accent: rgba(0, 0, 0, 0.85);
+  --glass-border: rgba(255, 255, 255, 0.3);
+  --border-radius: 24px;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: radial-gradient(circle at top left, #e2e8f0 0%, #ffffff 50%, #f1f5f9 100%);
+  min-height: 100vh;
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-white/70 backdrop-blur-md border border-white/20 shadow-lg;
+    border-radius: var(--border-radius);
+  }
+
+  .glass-card-dark {
+    @apply bg-black/90 backdrop-blur-md border border-white/10 shadow-xl text-white;
+    border-radius: var(--border-radius);
+  }
+
+  .btn-primary {
+    @apply bg-black text-white px-6 py-2.5 rounded-full font-medium transition-all hover:bg-gray-800 hover:scale-105 active:scale-95 disabled:opacity-50;
+  }
+
+  .btn-secondary {
+    @apply bg-white text-black px-6 py-2.5 rounded-full border border-gray-200 font-medium transition-all hover:bg-gray-50 hover:scale-105 active:scale-95 disabled:opacity-50;
+  }
+}
+
+/* TipTap Editor Styles */
+.ProseMirror {
+  @apply focus:outline-none;
+}
+
+.ProseMirror h1 {
+  @apply text-3xl font-bold mb-4;
+}
+
+.ProseMirror h2 {
+  @apply text-2xl font-bold mb-3 mt-4;
+}
+
+.ProseMirror h3 {
+  @apply text-xl font-bold mb-2 mt-3;
+}
+
+.ProseMirror p {
+  @apply mb-3;
+}
+
+.ProseMirror ul,
+.ProseMirror ol {
+  @apply ml-6 mb-3;
+}
+
+.ProseMirror li {
+  @apply mb-1;
+}
+
+.ProseMirror code {
+  @apply bg-gray-100 px-1 py-0.5 rounded text-red-600;
+}
+
+.ProseMirror pre {
+  @apply bg-gray-900 text-gray-100 p-4 rounded mb-3 overflow-x-auto;
+}
+
+.ProseMirror pre code {
+  @apply bg-transparent text-white p-0;
+}
+
+.ProseMirror blockquote {
+  @apply border-l-4 border-gray-300 pl-4 italic text-gray-600 my-3;
+}
+
+.ProseMirror hr {
+  @apply border-t border-gray-300 my-4;
+}

@@ -1,0 +1,78 @@
+name: Frontend CI/CD
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - "frontend/**"
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - "frontend/**"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+
+      - name: Install dependencies
+        run: |
+          cd frontend
+          npm ci
+
+      - name: Lint
+        run: |
+          cd frontend
+          npm run lint
+
+      - name: Build
+        run: |
+          cd frontend
+          npm run build
+
+      - name: Deploy to Vercel
+        if: github.ref == 'refs/heads/main'
+        uses: vercel/action@master
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          working-directory: frontend
+```
+
+---
+
+# 📋 FIRESTORE SCHEMA
+
+Create these collections in Firestore:
+```
+notes/
+├── [noteId]
+│   ├── id: string
+│   ├── title: string
+│   ├── content: string (HTML from TipTap)
+│   ├── created_by: string (uid)
+│   ├── collaborators: array[string] (uids)
+│   ├── created_at: timestamp
+│   └── updated_at: timestamp
+```
+
+**Security Rules** (`firestore.rules`):
+```
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /notes/{noteId} {
+      allow read: if request.auth.uid in resource.data.collaborators;
+      allow create: if request.auth.uid != null;
+      allow update: if request.auth.uid in resource.data.collaborators;
+      allow delete: if request.auth.uid == resource.data.created_by;
+    }
+  }
+}
