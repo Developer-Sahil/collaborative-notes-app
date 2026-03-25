@@ -8,8 +8,7 @@ import {
   ArrowRight, 
   Globe, 
   Star, 
-  Share2, 
-  Layers 
+  Share2
 } from "lucide-react";
 
 export default function LandingPage() {
@@ -90,23 +89,7 @@ export default function LandingPage() {
             </a>
           </div>
 
-          {/* Floating UI Mockup Preview */}
-          <div className="mt-32 relative animate-in zoom-in-95 fade-in duration-1000 delay-700">
-            <div className="absolute inset-x-0 -top-20 -bottom-20 bg-gradient-to-b from-indigo-500/10 to-transparent blur-[100px] -z-10" />
-            <div className="glass-card p-4 md:p-6 rounded-[32px] border border-white/10 bg-white/[0.02] shadow-[0_0_100px_rgba(0,0,0,0.5)]">
-               <div className="aspect-[16/9] w-full rounded-2xl bg-black/40 overflow-hidden relative group">
-                  <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="flex flex-col items-center gap-4 text-white/20 uppercase tracking-widest font-black text-sm">
-                          <Layers className="w-12 h-12" />
-                          Interactive Workspace Preview
-                      </div>
-                  </div>
-                  {/* Glassmorphism Mockup Elements */}
-                  <div className="absolute top-10 left-10 w-48 h-32 bg-white/5 border border-white/10 rounded-2xl backdrop-blur-xl animate-bounce duration-[4000ms]" />
-                  <div className="absolute bottom-10 right-10 w-64 h-48 bg-indigo-500/10 border border-indigo-500/20 rounded-2xl backdrop-blur-xl animate-pulse" />
-               </div>
-            </div>
-          </div>
+
         </section>
 
         {/* Features Grid */}
@@ -153,7 +136,7 @@ export default function LandingPage() {
                 Everything stays in sync, always.
             </p>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-4xl">
-                {['Google Docs Style', 'Public Tokens', 'Encryption', 'Permissions'].map((tag) => (
+                {['Google Docs Style', 'Public Tokens', 'Live Sync', 'Permissions'].map((tag) => (
                     <div key={tag} className="py-4 bg-white/5 border border-white/10 rounded-2xl text-[10px] font-bold uppercase tracking-widest text-white/60">
                         {tag}
                     </div>
