@@ -1,12 +1,14 @@
-FROM node:20-alpine
+FROM node:18-slim
 
 WORKDIR /app
 
-COPY package.json package-lock.json ./
-RUN npm ci --only=production
+COPY package*.json ./
+RUN npm install --production
 
 COPY . .
 
-EXPOSE 1234
+# Cloud Run injects process.env.PORT (usually 8080).
+# The node server automatically binds to this port.
+EXPOSE 8080
 
 CMD ["npm", "start"]
