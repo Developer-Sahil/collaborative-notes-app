@@ -97,7 +97,9 @@
     - **Backend Code Quality**: Added missing `HTTPException` import and implemented transactional safety using Firestore for `add_collaborator_by_email` in `note_service.py`. Removed unreachable `return` block in `notes.py`.
     - **Architecture & Security**: Removed unused Yjs wrapper endpoint from `main.py` reducing attack surfaces, and implemented `expires_at` logic for public share tokens.
     - **Frontend Refactoring**: Added `NEXT_PUBLIC_YJS_WEBSOCKET_URL` to `.env.local` to remove hardcoded ws locations. Optimized `Editor.tsx` auto-save logic to leverage TipTap's `update` event rather than cyclic getHTML checks.
-- **Documentation Expansion**: 
     - Updated `AUDIT.md` to mark vulnerabilities and architecture items as resolved.
     - Expanded `LEARNING.md` substantially to act as an interview preparation guide, outlining CRDT vs OT concepts, and deep-diving into WebSocket scaling.
     - Polished `README.md` to formally highlight new security features and environmental requisites.
+- **UI & Layout Cleanup**:
+    - Removed dummy metadata cards and unresolved navigation links from `Dashboard` (`dashboard/page.tsx`).
+    - Stripped placeholder anchor links from the `Landing Page` (`features`, `privacy`, `twitter`) to ensure a completely professional, production-ready aesthetic.

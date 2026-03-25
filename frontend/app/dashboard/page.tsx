@@ -47,8 +47,6 @@ export default function DashboardPage() {
   const navItems = [
     { id: "dashboard", label: "Dashboard", icon: "⌂" },
     { id: "documents", label: "Documents", icon: "📁" },
-    { id: "tasks", label: "My Tasks", icon: "☑" },
-    { id: "statistics", label: "Statistics", icon: "📊" },
   ];
 
   return (
@@ -126,48 +124,12 @@ export default function DashboardPage() {
         </header>
 
         {/* Dynamic Content */}
-        <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* Stats Section / Overall Info Card */}
-          <div className="md:col-span-1 glass-card-dark p-8 flex flex-col justify-between hover:shadow-2xl transition-shadow cursor-default group">
-            <div className="flex justify-between items-start">
-              <div>
-                <h3 className="text-xl font-bold mb-1 opacity-90">Workspace activity</h3>
-                <p className="text-white/50 text-sm">Real-time engagement</p>
-              </div>
-              <span className="bg-white/10 p-2 rounded-xl group-hover:scale-110 transition-transform">⚡</span>
+        <div className="flex-1 flex flex-col gap-8">
+          <div className="glass-card p-8 h-full flex-1">
+            <div className="flex items-center justify-between mb-8">
+              <h2 className="text-2xl font-bold tracking-tight">Recent Notes</h2>
             </div>
-            <div className="mt-8 flex items-baseline gap-2">
-              <span className="text-6xl font-bold tracking-tighter">14</span>
-              <span className="text-lg opacity-60 font-medium">Total Docs</span>
-            </div>
-            <div className="grid grid-cols-3 gap-4 mt-10">
-              <div className="text-center">
-                <p className="text-2xl font-bold">8</p>
-                <p className="text-[10px] uppercase tracking-wider opacity-50 font-bold">Recent</p>
-              </div>
-              <div className="text-center">
-                <p className="text-2xl font-bold">2</p>
-                <p className="text-[10px] uppercase tracking-wider opacity-50 font-bold">Shared</p>
-              </div>
-              <div className="text-center">
-                <p className="text-2xl font-bold">4</p>
-                <p className="text-[10px] uppercase tracking-wider opacity-50 font-bold">Archive</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="md:col-span-2 space-y-8">
-            {/* Note List Container */}
-            <div className="glass-card p-8 h-full">
-              <div className="flex items-center justify-between mb-8">
-                <h2 className="text-2xl font-bold tracking-tight">Recent Notes</h2>
-                <div className="flex gap-2">
-                  <button className="w-10 h-10 glass-card flex items-center justify-center text-sm font-bold shadow-sm">⊞</button>
-                  <button className="w-10 h-10 glass-card flex items-center justify-center text-sm font-bold shadow-sm opacity-50">≡</button>
-                </div>
-              </div>
-              <NoteList />
-            </div>
+            <NoteList />
           </div>
         </div>
       </main>

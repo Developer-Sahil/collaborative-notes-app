@@ -33,7 +33,6 @@ export default function LandingPage() {
 
           <div className="hidden md:flex items-center gap-8 text-sm font-medium text-white/60">
             <a href="#features" className="hover:text-white transition-colors">Features</a>
-            <a href="#security" className="hover:text-white transition-colors">Security</a>
             <a href="#collaboration" className="hover:text-white transition-colors">Collaboration</a>
           </div>
 
@@ -174,10 +173,6 @@ export default function LandingPage() {
           <p className="text-white/20 text-xs font-bold tracking-widest uppercase">
             © 2026 Developer Sahil. Engineered for teams.
           </p>
-          <div className="flex gap-8 text-xs font-bold uppercase tracking-widest text-white/40">
-            <a href="#" className="hover:text-white transition-colors">Privacy</a>
-            <a href="#" className="hover:text-white transition-colors">Twitter</a>
-          </div>
         </div>
       </footer>
     </div>
