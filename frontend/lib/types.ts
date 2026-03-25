@@ -10,6 +10,9 @@ export interface Note {
   content: string;
   created_by: string;
   collaborators: string[];
+  permissions: Record<string, string>;
+  is_public: boolean;
+  share_token: string | null;
   created_at: string;
   updated_at: string;
 }

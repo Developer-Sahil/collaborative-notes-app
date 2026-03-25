@@ -14,19 +14,24 @@ export function NoteList() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (user) {
-      loadNotes();
+    if (authLoading) return; // wait for auth to resolve
+    if (!user) {
+      setLoading(false);
+      return;
     }
-  }, [user]);
+    loadNotes();
+  }, [user, authLoading]);
 
   const loadNotes = async () => {
     try {
       setLoading(true);
+      setError(null);
       const fetchedNotes = await apiClient.getNotes();
       setNotes(fetchedNotes);
-    } catch (err) {
-      setError("Failed to load notes");
-      console.error(err);
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Unknown error";
+      console.error("Failed to load notes:", msg);
+      setError("Failed to load notes. Is the backend running?");
     } finally {
       setLoading(false);
     }

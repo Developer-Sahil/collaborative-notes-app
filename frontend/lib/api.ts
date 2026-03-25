@@ -42,6 +42,11 @@ class ApiClient {
     return response.data;
   }
 
+  async getPublicNote(token: string): Promise<Note> {
+    const response = await this.client.get(`/notes/public/${token}`);
+    return response.data;
+  }
+
   async updateNote(
     noteId: string,
     updates: Partial<{ title: string; content: string }>
@@ -54,10 +59,17 @@ class ApiClient {
     await this.client.delete(`/notes/${noteId}`);
   }
 
-  async addCollaborator(noteId: string, collaboratorUid: string): Promise<Note> {
-    const response = await this.client.post(
-      `/notes/${noteId}/collaborators/${collaboratorUid}`
-    );
+  async updateSharing(noteId: string, isPublic: boolean): Promise<Note> {
+    const response = await this.client.patch(`/notes/${noteId}/sharing`, null, {
+      params: { is_public: isPublic }
+    });
+    return response.data;
+  }
+
+  async addCollaborator(noteId: string, email: string): Promise<Note> {
+    const response = await this.client.post(`/notes/${noteId}/collaborators`, null, {
+      params: { email }
+    });
     return response.data;
   }
 

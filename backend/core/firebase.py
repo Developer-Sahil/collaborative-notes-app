@@ -30,6 +30,7 @@ class FirebaseManager:
             cred = credentials.Certificate(cred_dict)
             firebase_admin.initialize_app(cred)
             self.db = firestore.client()
+            self.auth = firebase_auth
         except Exception as e:
             print(f"Firebase initialization error: {e}")
             raise

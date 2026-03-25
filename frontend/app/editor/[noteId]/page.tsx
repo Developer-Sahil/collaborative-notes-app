@@ -44,18 +44,6 @@ export default function EditorPage() {
     }
   };
 
-  const handleAddCollaborator = async () => {
-    const email = prompt("Enter collaborator's UID:");
-    if (email && noteId) {
-      try {
-        await apiClient.addCollaborator(noteId as string, email);
-        alert("Collaborator added successfully!");
-      } catch (err) {
-        alert("Failed to add collaborator.");
-      }
-    }
-  };
-
   if (loading || authLoading) {
     return (
       <div className="h-screen flex items-center justify-center p-8">
@@ -92,31 +80,25 @@ export default function EditorPage() {
         <div className="flex items-center gap-6">
           <Link
             href="/dashboard"
-            className="w-12 h-12 glass-card flex items-center justify-center group hover:bg-black hover:text-white transition-all duration-300"
+            className="w-12 h-12 bg-white/5 border border-white/10 flex items-center justify-center group hover:bg-white hover:text-black transition-all duration-300 rounded-2xl"
             title="Dashboard"
           >
-            <span className="text-xl group-hover:scale-110 transition-transform">←</span>
+            <span className="text-xl group-hover:scale-110 transition-transform text-white group-hover:text-black">←</span>
           </Link>
           <div className="flex flex-col">
-            <h1 className="text-4xl font-black tracking-tighter text-gray-900 leading-none mb-1 uppercase">
+            <h1 className="text-4xl font-black tracking-tighter text-white leading-none mb-1 uppercase">
               {note.title}
             </h1>
             <div className="flex items-center gap-2">
-               <span className="text-[10px] font-bold tracking-widest text-gray-400 uppercase">Document ID:</span>
-               <code className="text-[10px] bg-gray-100 px-2 py-0.5 rounded font-mono text-gray-500 uppercase">{noteId?.toString().substring(0, 12)}...</code>
+               <span className="text-[10px] font-bold tracking-widest text-white/40 uppercase">Document ID:</span>
+               <code className="text-[10px] bg-white/5 px-2 py-0.5 rounded font-mono text-white/60 uppercase">{noteId?.toString().substring(0, 12)}...</code>
             </div>
           </div>
         </div>
         
         <div className="flex items-center gap-3">
-          <button
-            onClick={handleAddCollaborator}
-            className="btn-secondary py-3 px-6 text-sm font-bold shadow-sm"
-          >
-             Share Access
-          </button>
-          <div className="w-12 h-12 rounded-full glass-card flex items-center justify-center font-bold text-xs ring-2 ring-black/5 overflow-hidden">
-            <img src={`https://ui-avatars.com/api/?name=${user?.email}&background=000&color=fff`} alt="User" />
+          <div className="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center font-bold text-xs ring-2 ring-indigo-500/10 overflow-hidden shadow-2xl">
+            <img src={`https://ui-avatars.com/api/?name=${user?.email}&background=6366f1&color=fff`} alt="User" />
           </div>
         </div>
       </header>
@@ -126,7 +108,7 @@ export default function EditorPage() {
         <div className="h-full max-w-6xl mx-auto w-full flex flex-col gap-6">
           <Editor 
             noteId={noteId as string} 
-            initialContent={note.content} 
+            initialNote={note} 
             onSave={handleSave} 
           />
         </div>

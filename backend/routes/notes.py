@@ -83,14 +83,14 @@ async def delete_note(note_id: str, current_user: dict = Depends(get_current_use
     return None
 
 
-@router.post("/{note_id}/collaborators/{collaborator_uid}")
-async def add_collaborator(
+@router.patch("/{note_id}/sharing", response_model=NoteResponse)
+async def update_sharing(
     note_id: str,
-    collaborator_uid: str,
+    is_public: bool,
     current_user: dict = Depends(get_current_user),
 ):
-    """Add a collaborator to a note"""
-    note = note_service.add_collaborator(note_id, collaborator_uid, current_user["uid"])
+    """Update public sharing status of a note"""
+    note = note_service.update_sharing(note_id, is_public, current_user["uid"])
     
     if not note:
         raise HTTPException(
@@ -99,3 +99,27 @@ async def add_collaborator(
         )
     
     return NoteResponse(**note)
+
+
+@router.get("/public/{token}", response_model=NoteResponse)
+async def get_public_note(token: str):
+    """Get a public note by share token (no auth required)"""
+    note = note_service.get_note_by_share_token(token)
+    
+    if not note:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Public note not found or access expired",
+        )
+    
+    return NoteResponse(**note)
+
+
+@router.post("/{note_id}/collaborators")
+async def add_collaborator(
+    note_id: str,
+    email: str,
+    current_user: dict = Depends(get_current_user),
+):
+    """Add a collaborator to a note by email"""
+    return note_service.add_collaborator_by_email(note_id, email, current_user["uid"])

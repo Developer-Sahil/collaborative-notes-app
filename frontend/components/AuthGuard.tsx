@@ -4,7 +4,6 @@ import { useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
 
-const PUBLIC_ROUTES = ["/login", "/signup"];
 
 export function AuthGuard({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
@@ -14,11 +13,15 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (loading) return;
 
-    const isPublicRoute = PUBLIC_ROUTES.includes(pathname);
+    const isPublicRoute = 
+      pathname === "/" || 
+      pathname === "/login" || 
+      pathname === "/signup" || 
+      pathname.startsWith("/share/");
 
     if (!user && !isPublicRoute) {
       router.push("/login");
-    } else if (user && isPublicRoute) {
+    } else if (user && (pathname === "/login" || pathname === "/signup")) {
       router.push("/dashboard");
     }
   }, [user, loading, pathname, router]);

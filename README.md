@@ -1,21 +1,25 @@
-# iDraft - Collaborative Notes
+# Collaborative Notes
 
-A premium, real-time collaborative notes application featuring a modern **Glassmorphism** UI. Built with Next.js 14, FastAPI, and Yjs for seamless synchronization.
+A premium, real-time collaborative notes application featuring a modern **Glassmorphism** UI. Built with Next.js 14, FastAPI, and Yjs for seamless synchronization and concurrency control.
 
 ## ✨ Features
 
 - **Premium UI**: Sophisticated Glassmorphism design system with radial gradients and backdrop blurs.
-- **Real-time Collaboration**: Live note editing powered by Yjs and WebSocket protocols.
-- **Secure Auth**: Integration with Firebase Authentication for user-specific workspaces.
-- **Responsive Workspace**: Modern dashboard with activity tracking and document management.
+- **Real-time Collaboration**: Live note editing via CRDT conflict resolution using Yjs and WebSockets.
+- **Secure Auth**: Integration with Firebase Authentication for user-specific JWT validated workspaces.
+- **Role-based Access**: Add collaborators by email or generate secure share tokens with built-in expiration (`expires_at`).
+- **Data Integrity**: Firestore architecture utilizing `@firestore.transactional` logic for race-condition prevention during concurrent updates.
 
 ## 📂 Structure
 
-- **frontend/**: Next.js (App Router) frontend with Tailwind CSS.
-- **backend/**: FastAPI (Python 3.12) backend managing Firestore metadata.
-- **yjs-server/**: Dedicated Yjs WebSocket server for document sync.
+- **frontend/**: Next.js (App Router) frontend with Tailwind CSS. Includes specialized hooks for CRDT connection state management.
+- **backend/**: FastAPI (Python 3.12) backend managing Firestore metadata, roles, and transaction states.
+- **yjs-server/**: Dedicated standalone Node.js Yjs WebSocket server for high-throughput document sync logic.
 
 ## 🚀 Setup & Running
+
+### Requirements
+Ensure you configure the `.env.local` inside `frontend/` and `.env` inside `backend/` using their respective `.example` files. The frontend dynamically consumes `NEXT_PUBLIC_YJS_WEBSOCKET_URL` for real-time routing.
 
 ### 1. Backend
 ```bash
@@ -39,6 +43,6 @@ npm start
 ```
 
 ## 🛠 Tech Stack
-- **Frontend**: Next.js, Tailwind CSS, Firebase Client SDK, Lucide Icons.
-- **Backend**: FastAPI, Firebase Admin SDK, Pydantic.
-- **Real-time**: Yjs, y-websocket.
+- **Frontend**: Next.js, Tailwind CSS, TipTap, Firebase Client SDK, Zustand.
+- **Backend**: FastAPI, Firebase Admin SDK (Firestore), Pydantic.
+- **Real-time Engine**: Yjs, y-websocket, y-prosemirror.
