@@ -10,7 +10,6 @@ import Link from "next/link";
 
 export default function EditorPage() {
   const { noteId } = useParams();
-  const router = useRouter();
   const { user, loading: authLoading } = useAuth();
   const [note, setNote] = useState<Note | null>(null);
   const [loading, setLoading] = useState(true);
@@ -80,24 +79,24 @@ export default function EditorPage() {
         <div className="flex items-center gap-6">
           <Link
             href="/dashboard"
-            className="w-12 h-12 bg-white/5 border border-white/10 flex items-center justify-center group hover:bg-white hover:text-black transition-all duration-300 rounded-2xl"
+            className="w-12 h-12 bg-black/5 border border-black/10 flex items-center justify-center group hover:bg-black hover:text-white transition-all duration-300 rounded-2xl"
             title="Dashboard"
           >
-            <span className="text-xl group-hover:scale-110 transition-transform text-white group-hover:text-black">←</span>
+            <span className="text-xl group-hover:scale-110 transition-transform text-black group-hover:text-white">←</span>
           </Link>
           <div className="flex flex-col">
-            <h1 className="text-4xl font-black tracking-tighter text-white leading-none mb-1 uppercase">
+            <h1 className="text-4xl font-black tracking-tighter text-black leading-none mb-1 uppercase">
               {note.title}
             </h1>
             <div className="flex items-center gap-2">
-               <span className="text-[10px] font-bold tracking-widest text-white/40 uppercase">Document ID:</span>
-               <code className="text-[10px] bg-white/5 px-2 py-0.5 rounded font-mono text-white/60 uppercase">{noteId?.toString().substring(0, 12)}...</code>
+               <span className="text-[10px] font-bold tracking-widest text-black/40 uppercase">Document ID:</span>
+               <code className="text-[10px] bg-black/5 px-2 py-0.5 rounded font-mono text-black/60 uppercase">{noteId?.toString().substring(0, 12)}...</code>
             </div>
           </div>
         </div>
         
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center font-bold text-xs ring-2 ring-indigo-500/10 overflow-hidden shadow-2xl">
+          <div className="w-12 h-12 rounded-full border border-black/10 flex items-center justify-center font-bold text-xs ring-2 ring-indigo-500/10 overflow-hidden shadow-2xl">
             <img src={`https://ui-avatars.com/api/?name=${user?.email}&background=6366f1&color=fff`} alt="User" />
           </div>
         </div>

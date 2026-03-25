@@ -144,7 +144,7 @@ export function Editor({ noteId, initialNote, onSave }: EditorProps) {
   }, [editor, handleSave]);
 
   if (!editor) return (
-    <div className="flex items-center justify-center h-48 text-white/40 font-bold tracking-widest uppercase text-[10px]">
+    <div className="flex items-center justify-center h-48 text-black/40 font-bold tracking-widest uppercase text-[10px]">
       Initializing collaborative environment...
     </div>
   );
@@ -152,9 +152,9 @@ export function Editor({ noteId, initialNote, onSave }: EditorProps) {
   return (
     <div className="flex flex-col h-[calc(100vh-200px)] glass-card overflow-hidden">
       {/* Toolbar */}
-      <div className="border-b border-white/10 bg-white/5 p-4 flex items-center gap-3 flex-wrap">
+      <div className="border-b border-black/10 bg-black/5 p-4 flex items-center gap-3 flex-wrap">
         {/* Format buttons */}
-        <div className="flex items-center gap-2 pr-4 border-r border-white/10">
+        <div className="flex items-center gap-2 pr-4 border-r border-black/10">
           {[
             { label: "B", action: () => editor.chain().focus().toggleBold().run(), active: editor.isActive("bold"), cls: "font-bold" },
             { label: "I", action: () => editor.chain().focus().toggleItalic().run(), active: editor.isActive("italic"), cls: "italic font-serif" },
@@ -166,7 +166,7 @@ export function Editor({ noteId, initialNote, onSave }: EditorProps) {
               className={clsx(
                 "w-10 h-10 rounded-xl transition-all duration-200 flex items-center justify-center",
                 cls,
-                active ? "bg-indigo-600 text-white shadow-lg" : "bg-white/5 text-white hover:bg-white/10"
+                active ? "bg-indigo-600 text-white shadow-lg" : "bg-black/5 text-black hover:bg-black/10"
               )}
             >
               {label}
@@ -194,10 +194,10 @@ export function Editor({ noteId, initialNote, onSave }: EditorProps) {
           disabled={isSaving}
           className={clsx(
             "flex items-center gap-2 px-6 py-2 rounded-xl transition-all duration-200 text-xs font-bold",
-            isSaving ? "bg-white/10 text-white/40" : "bg-white text-black hover:bg-white/90"
+            isSaving ? "bg-black/10 text-black/40" : "bg-black text-white hover:bg-black/90"
           )}
         >
-          {isSaving ? <span className="animate-spin w-3 h-3 border-2 border-white/50 border-t-white rounded-full" /> : <Save className="w-4 h-4" />}
+          {isSaving ? <span className="animate-spin w-3 h-3 border-2 border-black/50 border-t-black rounded-full" /> : <Save className="w-4 h-4" />}
           {isSaving ? "Saving..." : (lastSaved ? "Saved" : "Save")}
         </button>
       </div>
