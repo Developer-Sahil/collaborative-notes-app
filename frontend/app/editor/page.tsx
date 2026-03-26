@@ -113,11 +113,10 @@ export default function EditorPage() {
         </div>
       </nav>
 
-      {/* Editor Main */}
       <div className="flex-1 overflow-hidden">
         <Editor 
           noteId={noteId as string} 
-          initialContent={note.content} 
+          initialNote={note} 
           onSave={handleSave} 
         />
       </div>

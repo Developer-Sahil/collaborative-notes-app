@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { Editor } from "@/components/Editor";
 import { apiClient } from "@/lib/api";
 import { Note } from "@/lib/types";

@@ -1,0 +1,3 @@
+app/editor/[noteId]/page.tsx(4,21): error TS6133: 'useRouter' is declared but its value is never read.
+app/editor/page.tsx(120,11): error TS2322: Type '{ noteId: string; initialContent: string; onSave: (content: string) => Promise<void>; }' is not assignable to type 'IntrinsicAttributes & EditorProps'.
+  Property 'initialContent' does not exist on type 'IntrinsicAttributes & EditorProps'. Did you mean 'initialNote'?
