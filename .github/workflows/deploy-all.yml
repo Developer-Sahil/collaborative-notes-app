@@ -1,4 +1,4 @@
-name: Deploy Full Stack to Cloud Run
+name: Deploy Backend & Yjs to Cloud Run
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
 
 env:
   PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-  REGION: us-central1 # Update to your preferred region
+  REGION: us-central1
 
 jobs:
   deploy-backend:
@@ -35,6 +35,9 @@ jobs:
             --set-secrets="/app/secrets/firebase-key.json=firebase-credentials:latest"
             --set-env-vars="FIREBASE_AUTH_KEY_PATH=/app/secrets/firebase-key.json"
 
+      - name: Print Backend URL
+        run: echo "Backend deployed to ${{ steps.deploy.outputs.url }}"
+
   deploy-yjs:
     runs-on: ubuntu-latest
     outputs:
@@ -57,39 +60,5 @@ jobs:
           region: '${{ env.REGION }}'
           flags: '--allow-unauthenticated'
 
-  deploy-frontend:
-    needs: [deploy-backend, deploy-yjs]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Google Auth
-        uses: 'google-github-actions/auth@v2'
-        with:
-          credentials_json: '${{ secrets.GCP_SA_KEY }}'
-
-      - name: Prep WebSocket URL
-        id: prep
-        run: |
-          YJS_WSS_URL=$(echo "${{ needs.deploy-yjs.outputs.url }}" | sed 's/https:\/\//wss:\/\//')
-          echo "wss_url=$YJS_WSS_URL" >> $GITHUB_OUTPUT
-
-      - name: Build Frontend Image
-        run: |
-          gcloud auth configure-docker gcr.io --quiet
-          cd frontend
-          docker build --no-cache --progress=plain \
-            -t gcr.io/${{ env.PROJECT_ID }}/notes-frontend \
-            --build-arg NEXT_PUBLIC_BACKEND_URL="${{ needs.deploy-backend.outputs.url }}" \
-            --build-arg NEXT_PUBLIC_YJS_WEBSOCKET_URL="${{ steps.prep.outputs.wss_url }}" \
-            .
-          docker push gcr.io/${{ env.PROJECT_ID }}/notes-frontend
-
-      - name: Deploy Frontend
-        uses: 'google-github-actions/deploy-cloudrun@v2'
-        with:
-          service: 'notes-frontend'
-          image: 'gcr.io/${{ env.PROJECT_ID }}/notes-frontend'
-          region: '${{ env.REGION }}'
-          flags: '--allow-unauthenticated --port=3000'
+      - name: Print Yjs URL
+        run: echo "Yjs deployed to ${{ steps.deploy.outputs.url }}"
