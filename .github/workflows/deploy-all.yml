@@ -75,13 +75,19 @@ jobs:
           YJS_WSS_URL=$(echo "${{ needs.deploy-yjs.outputs.url }}" | sed 's/https:\/\//wss:\/\//')
           echo "wss_url=$YJS_WSS_URL" >> $GITHUB_OUTPUT
 
+      - name: Build Frontend Image
+        run: |
+          cd frontend
+          gcloud builds submit --tag gcr.io/${{ env.PROJECT_ID }}/notes-frontend \
+            --build-arg="NEXT_PUBLIC_BACKEND_URL=${{ needs.deploy-backend.outputs.url }}" \
+            --build-arg="NEXT_PUBLIC_YJS_WEBSOCKET_URL=${{ steps.prep.outputs.wss_url }}" \
+            . \
+            --suppress-logs
+
       - name: Deploy Frontend
         uses: 'google-github-actions/deploy-cloudrun@v2'
         with:
           service: 'notes-frontend'
-          source: './frontend'
+          image: 'gcr.io/${{ env.PROJECT_ID }}/notes-frontend'
           region: '${{ env.REGION }}'
-          flags: |
-            --allow-unauthenticated
-            --port=3000
-            --set-build-env-vars="NEXT_PUBLIC_BACKEND_URL=${{ needs.deploy-backend.outputs.url }},NEXT_PUBLIC_YJS_WEBSOCKET_URL=${{ steps.prep.outputs.wss_url }}"
+          flags: '--allow-unauthenticated --port=3000'
