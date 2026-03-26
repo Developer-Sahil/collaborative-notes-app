@@ -4,9 +4,10 @@ from functools import lru_cache
 
 class Settings(BaseSettings):
     # Firebase
-    FIREBASE_PROJECT_ID: str
-    FIREBASE_PRIVATE_KEY: str
-    FIREBASE_CLIENT_EMAIL: str
+    FIREBASE_AUTH_KEY_PATH: str = None  # Path to mounted secret JSON
+    FIREBASE_PROJECT_ID: str = None
+    FIREBASE_PRIVATE_KEY: str = None
+    FIREBASE_CLIENT_EMAIL: str = None
     
     # API
     API_TITLE: str = "Collaborative Notes API"

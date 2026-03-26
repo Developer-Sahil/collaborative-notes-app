@@ -19,15 +19,20 @@ class FirebaseManager:
     def _initialize(self):
         """Initialize Firebase Admin SDK"""
         try:
-            cred_dict = {
-                "type": "service_account",
-                "project_id": settings.FIREBASE_PROJECT_ID,
-                "private_key": settings.FIREBASE_PRIVATE_KEY.replace("\\n", "\n").replace('"', ''),
-                "client_email": settings.FIREBASE_CLIENT_EMAIL,
-                "token_uri": "https://oauth2.googleapis.com/token",
-            }
-            
-            cred = credentials.Certificate(cred_dict)
+            # Prefer initializing via a secret file path (recommended for Cloud Run)
+            if settings.FIREBASE_AUTH_KEY_PATH:
+                cred = credentials.Certificate(settings.FIREBASE_AUTH_KEY_PATH)
+            else:
+                # Fallback to individual fields
+                cred_dict = {
+                    "type": "service_account",
+                    "project_id": settings.FIREBASE_PROJECT_ID,
+                    "private_key": settings.FIREBASE_PRIVATE_KEY.replace("\\n", "\n").replace('"', ''),
+                    "client_email": settings.FIREBASE_CLIENT_EMAIL,
+                    "token_uri": "https://oauth2.googleapis.com/token",
+                }
+                cred = credentials.Certificate(cred_dict)
+                
             firebase_admin.initialize_app(cred)
             self.db = firestore.client()
             self.auth = firebase_auth
