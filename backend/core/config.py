@@ -17,6 +17,7 @@ class Settings(BaseSettings):
     ALLOWED_ORIGINS: list = [
         "http://localhost:3000",
         "http://localhost:8000",
+        "https://collaborative-notes-app-pi.vercel.app",
     ]
     
     # WebSocket
