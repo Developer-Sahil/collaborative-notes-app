@@ -1,0 +1,94 @@
+name: Deploy Full Stack to Cloud Run
+
+on:
+  push:
+    branches: [ main ]
+
+env:
+  PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  REGION: us-central1 # Update to your preferred region
+
+jobs:
+  deploy-backend:
+    runs-on: ubuntu-latest
+    outputs:
+      url: ${{ steps.deploy.outputs.url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Google Auth
+        uses: 'google-github-actions/auth@v2'
+        with:
+          credentials_json: '${{ secrets.GCP_SA_KEY }}'
+
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v2'
+
+      - name: Build and Deploy Backend
+        id: deploy
+        run: |
+          gcloud builds submit --tag gcr.io/$PROJECT_ID/notes-backend ./backend
+          URL=$(gcloud run deploy notes-backend \
+            --image gcr.io/$PROJECT_ID/notes-backend \
+            --platform managed \
+            --region $REGION \
+            --allow-unauthenticated \
+            --set-secrets="/app/secrets/firebase-key.json=YOUR_SECRET_NAME:latest" \
+            --set-env-vars="FIREBASE_AUTH_KEY_PATH=/app/secrets/firebase-key.json" \
+            --format='value(status.url)')
+          echo "url=$URL" >> $GITHUB_OUTPUT
+
+  deploy-yjs:
+    runs-on: ubuntu-latest
+    outputs:
+      url: ${{ steps.deploy.outputs.url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Google Auth
+        uses: 'google-github-actions/auth@v2'
+        with:
+          credentials_json: '${{ secrets.GCP_SA_KEY }}'
+
+      - name: Build and Deploy Yjs Server
+        id: deploy
+        run: |
+          gcloud builds submit --tag gcr.io/$PROJECT_ID/notes-yjs-server ./yjs-server
+          URL=$(gcloud run deploy notes-yjs-server \
+            --image gcr.io/$PROJECT_ID/notes-yjs-server \
+            --platform managed \
+            --region $REGION \
+            --allow-unauthenticated \
+            --format='value(status.url)')
+          echo "url=$URL" >> $GITHUB_OUTPUT
+
+  deploy-frontend:
+    needs: [deploy-backend, deploy-yjs]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Google Auth
+        uses: 'google-github-actions/auth@v2'
+        with:
+          credentials_json: '${{ secrets.GCP_SA_KEY }}'
+
+      - name: Build and Deploy Frontend
+        run: |
+          # Convert https:// to wss:// for Yjs
+          YJS_WSS_URL=$(echo "${{ needs.deploy-yjs.outputs.url }}" | sed 's/https:\/\//wss:\/\//')
+          
+          gcloud builds submit --tag gcr.io/$PROJECT_ID/notes-frontend \
+            --build-arg="NEXT_PUBLIC_BACKEND_URL=${{ needs.deploy-backend.outputs.url }}" \
+            --build-arg="NEXT_PUBLIC_YJS_WEBSOCKET_URL=$YJS_WSS_URL" \
+            ./frontend
+          
+          gcloud run deploy notes-frontend \
+            --image gcr.io/$PROJECT_ID/notes-frontend \
+            --platform managed \
+            --region $REGION \
+            --allow-unauthenticated \
+            --port 3000

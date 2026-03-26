@@ -107,8 +107,8 @@
 ## [2026-03-26]
 - **Cloud Environment Verification**:
     - Identified local `gcloud` permission issue (`AUTH_PERMISSION_DENIED`).
-    - **Cloud Run Console Documentation**:
-    - Created `CLOUDRUN_GUIDE.md` with step-by-step console instructions.
-    - Added production-ready `frontend/Dockerfile` and optimized `next.config.js` for Cloud Run standalone mode.
-    - Updated `.dockerignore` files across Backend and Frontend to protect secrets and ignore local build artifacts.
-    - Linked the deployment guide in `README.md`.
+    - **Unified GitHub Actions Deployment**:
+    - Created `.github/workflows/deploy-all.yml` to automatically build and deploy Frontend, Backend, and Yjs in parallel.
+    - Updated `frontend/Dockerfile` to support build-time injection of service URLs via `ARG`.
+    - Integrated Secret Manager mounting into the automated backend deployment.
+    - Pushed the automation structure to GitHub.

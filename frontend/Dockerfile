@@ -7,6 +7,12 @@ FROM base AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
+# Add build arguments for URLs
+ARG NEXT_PUBLIC_BACKEND_URL
+ARG NEXT_PUBLIC_YJS_WEBSOCKET_URL
+ENV NEXT_PUBLIC_BACKEND_URL=$NEXT_PUBLIC_BACKEND_URL
+ENV NEXT_PUBLIC_YJS_WEBSOCKET_URL=$NEXT_PUBLIC_YJS_WEBSOCKET_URL
+
 # Install dependencies
 COPY package.json package-lock.json* ./
 RUN npm ci
