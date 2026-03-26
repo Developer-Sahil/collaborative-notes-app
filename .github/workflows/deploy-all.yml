@@ -23,23 +23,17 @@ jobs:
         with:
           credentials_json: '${{ secrets.GCP_SA_KEY }}'
 
-      - name: 'Set up Cloud SDK'
-        uses: 'google-github-actions/setup-gcloud@v2'
-
-      - name: Build and Deploy Backend
+      - name: Deploy Backend
         id: deploy
-        run: |
-          cd backend
-          gcloud builds submit --tag gcr.io/$PROJECT_ID/notes-backend . --suppress-logs
-          URL=$(gcloud run deploy notes-backend \
-            --image gcr.io/$PROJECT_ID/notes-backend \
-            --platform managed \
-            --region $REGION \
-            --allow-unauthenticated \
-            --set-secrets="/app/secrets/firebase-key.json=firebase-credentials:latest" \
-            --set-env-vars="FIREBASE_AUTH_KEY_PATH=/app/secrets/firebase-key.json" \
-            --format='value(status.url)')
-          echo "url=$URL" >> $GITHUB_OUTPUT
+        uses: 'google-github-actions/deploy-cloudrun@v2'
+        with:
+          service: 'notes-backend'
+          source: './backend'
+          region: '${{ env.REGION }}'
+          flags: |
+            --allow-unauthenticated
+            --set-secrets="/app/secrets/firebase-key.json=firebase-credentials:latest"
+            --set-env-vars="FIREBASE_AUTH_KEY_PATH=/app/secrets/firebase-key.json"
 
   deploy-yjs:
     runs-on: ubuntu-latest
@@ -54,18 +48,14 @@ jobs:
         with:
           credentials_json: '${{ secrets.GCP_SA_KEY }}'
 
-      - name: Build and Deploy Yjs Server
+      - name: Deploy Yjs Server
         id: deploy
-        run: |
-          cd yjs-server
-          gcloud builds submit --tag gcr.io/$PROJECT_ID/notes-yjs-server . --suppress-logs
-          URL=$(gcloud run deploy notes-yjs-server \
-            --image gcr.io/$PROJECT_ID/notes-yjs-server \
-            --platform managed \
-            --region $REGION \
-            --allow-unauthenticated \
-            --format='value(status.url)')
-          echo "url=$URL" >> $GITHUB_OUTPUT
+        uses: 'google-github-actions/deploy-cloudrun@v2'
+        with:
+          service: 'notes-yjs-server'
+          source: './yjs-server'
+          region: '${{ env.REGION }}'
+          flags: '--allow-unauthenticated'
 
   deploy-frontend:
     needs: [deploy-backend, deploy-yjs]
@@ -79,20 +69,19 @@ jobs:
         with:
           credentials_json: '${{ secrets.GCP_SA_KEY }}'
 
-      - name: Build and Deploy Frontend
+      - name: Prep WebSocket URL
+        id: prep
         run: |
-          # Convert https:// to wss:// for Yjs
           YJS_WSS_URL=$(echo "${{ needs.deploy-yjs.outputs.url }}" | sed 's/https:\/\//wss:\/\//')
-          
-          cd frontend
-          gcloud builds submit --tag gcr.io/$PROJECT_ID/notes-frontend \
-            --build-arg="NEXT_PUBLIC_BACKEND_URL=${{ needs.deploy-backend.outputs.url }}" \
-            --build-arg="NEXT_PUBLIC_YJS_WEBSOCKET_URL=$YJS_WSS_URL" \
-            .
-          
-          gcloud run deploy notes-frontend \
-            --image gcr.io/$PROJECT_ID/notes-frontend \
-            --platform managed \
-            --region $REGION \
-            --allow-unauthenticated \
-            --port 3000
+          echo "wss_url=$YJS_WSS_URL" >> $GITHUB_OUTPUT
+
+      - name: Deploy Frontend
+        uses: 'google-github-actions/deploy-cloudrun@v2'
+        with:
+          service: 'notes-frontend'
+          source: './frontend'
+          region: '${{ env.REGION }}'
+          flags: '--allow-unauthenticated --port=3000'
+          env_vars: |
+            NEXT_PUBLIC_BACKEND_URL=${{ needs.deploy-backend.outputs.url }}
+            NEXT_PUBLIC_YJS_WEBSOCKET_URL=${{ steps.prep.outputs.wss_url }}
