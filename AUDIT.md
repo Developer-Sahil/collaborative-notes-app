@@ -54,3 +54,10 @@ The project currently relies on manual verification scripts (`verify_*_script.py
 - **IAM Hardening**: Multiple permission gaps (Storage, Artifact Registry, Secret Manager) were identified and bridged during the cloud migration.
     - *Action*: Documented required IAM roles and standardized the service account permissions across all three micro-services.
 - **Dockerization**: Dockerfiles were optimized (multi-stage for Frontend, slim images for Backend/Yjs) to ensure minimal footprint and fast cold starts on Cloud Run.
+- **Frontend Platform Choice**: Migrated to Vercel for the frontend to simplify environment variable management and Next.js static optimization.
+
+### 10. CORS & Inter-service Connectivity ✅ [RESOLVED]
+- **Vercel Origin Blocking**: Initial deployment on Vercel was blocked by the backend's strict CORS policy.
+    - *Action*: Implemented `allow_origin_regex` in FastAPI to support both the production Vercel URL and wildcard preview deployments safely.
+- **Environment Variable Alignment**: Identified a mismatch between frontend configuration (`NEXT_PUBLIC_API_URL`) and infrastructure naming (`NEXT_PUBLIC_BACKEND_URL`).
+    - *Action*: Standardized the API client to check for both, ensuring consistent connectivity in all environments.

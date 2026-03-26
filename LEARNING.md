@@ -87,4 +87,8 @@ Public links generate a decoupled `share_token` (so iterating document IDs doesn
     *Answer:* Using `y-redis`, we'd pipe the awareness updates and state vector exchanges through a Redis stream, allowing users connecting to different horizontal WebSocket instances to still sync.
 -   **"Why use Firebase for Auth but a custom FastAPI backend?"**
     *Answer:* Firebase Auth provides secure, compliant JWTs out-of-the-box, preventing us from manually handling sensitive passwords. Passing this JWT to our custom backend gives us flexibility over our data models while offloading auth liability.
+-   **"Why did you migrate the Frontend from Cloud Run to Vercel?"**
+    *Answer:* Cloud Run requires Dockerizing the Next.js app, which makes passing build-time environment variables (`NEXT_PUBLIC_*`) complex in a CI/CD pipeline (requiring `--build-arg`). Vercel natively optimizes Next.js, handles static pre-rendering more gracefully, and provides a simpler dashboard for managing the many Firebase environment variables.
+-   **"How did you resolve CORS issues between Vercel and Cloud Run?"**
+    *Answer:* Since Vercel uses unique preview URLs for every deployment, standard `allow_origins=["*"]` is too broad. I used FastAPI's `allow_origin_regex` to safely allow any `*.vercel.app` subdomain while strictly verifying the production URL, maintaining security while supporting a distributed architecture.
 

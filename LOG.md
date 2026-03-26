@@ -118,7 +118,11 @@
     - Migrated frontend from Cloud Run (Docker) to **Vercel** to avoid multi-stage Docker ARG complexity with Next.js.
     - Configured all `NEXT_PUBLIC_*` environment variables directly in the Vercel dashboard.
     - Added `export const dynamic = 'force-dynamic'` to all Firebase-dependent pages to prevent build-time pre-render crashes.
+- **Vercel & Cloud Run Integration**:
+    - **CORS Fix**: Implemented `allow_origin_regex` in `main.py` to support all Vercel deployment subdomains.
+    - **Variable Alignment**: Fixed a mismatch between `NEXT_PUBLIC_API_URL` and `NEXT_PUBLIC_BACKEND_URL` in the frontend API client.
+    - **Pydantic Stability**: Updated backend settings to use `Optional[str]` to prevent startup crashes in Pydantic v2 when environment variables are missing during initial container boot.
 - **🚀 PRODUCTION LIVE**:
-    - Backend: `https://notes-backend-xarsj3mzga-uc.a.run.app` — Health check verified `{"status":"healthy"}`.
-    - Yjs Server: `https://notes-yjs-server-xarsj3mzga-uc.a.run.app` — Deployed and active.
-    - Frontend: Deployed on Vercel with all environment variables configured.
+    - **Frontend**: [https://collaborative-notes-app-pi.vercel.app](https://collaborative-notes-app-pi.vercel.app)
+    - **Backend API**: `https://notes-backend-xarsj3mzga-uc.a.run.app`
+    - **Yjs WebSocket**: `wss://notes-yjs-server-xarsj3mzga-uc.a.run.app`
