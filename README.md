@@ -42,6 +42,11 @@ npm install
 npm start
 ```
 
+## ☁️ Deployment
+
+For professional deployment to **Google Cloud Run** using the Console and Secret Manager, see our comprehensive:
+👉 **[Cloud Run Deployment Guide](CLOUDRUN_GUIDE.md)**
+
 ## 🛠 Tech Stack
 - **Frontend**: Next.js, Tailwind CSS, TipTap, Firebase Client SDK, Zustand.
 - **Backend**: FastAPI, Firebase Admin SDK (Firestore), Pydantic.

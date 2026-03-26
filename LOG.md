@@ -103,3 +103,12 @@
 - **UI & Layout Cleanup**:
     - Removed dummy metadata cards and unresolved navigation links from `Dashboard` (`dashboard/page.tsx`).
     - Stripped placeholder anchor links from the `Landing Page` (`features`, `privacy`, `twitter`) to ensure a completely professional, production-ready aesthetic.
+
+## [2026-03-26]
+- **Cloud Environment Verification**:
+    - Identified local `gcloud` permission issue (`AUTH_PERMISSION_DENIED`).
+    - **Cloud Run Console Documentation**:
+    - Created `CLOUDRUN_GUIDE.md` with step-by-step console instructions.
+    - Added production-ready `frontend/Dockerfile` and optimized `next.config.js` for Cloud Run standalone mode.
+    - Updated `.dockerignore` files across Backend and Frontend to protect secrets and ignore local build artifacts.
+    - Linked the deployment guide in `README.md`.
