@@ -29,7 +29,8 @@ jobs:
       - name: Build and Deploy Backend
         id: deploy
         run: |
-          gcloud builds submit --tag gcr.io/$PROJECT_ID/notes-backend ./backend
+          # Use --suppress-logs to avoid the log-streaming permission error
+          gcloud builds submit --tag gcr.io/$PROJECT_ID/notes-backend --file ./backend/Dockerfile ./backend --suppress-logs
           URL=$(gcloud run deploy notes-backend \
             --image gcr.io/$PROJECT_ID/notes-backend \
             --platform managed \
@@ -56,7 +57,7 @@ jobs:
       - name: Build and Deploy Yjs Server
         id: deploy
         run: |
-          gcloud builds submit --tag gcr.io/$PROJECT_ID/notes-yjs-server ./yjs-server
+          gcloud builds submit --tag gcr.io/$PROJECT_ID/notes-yjs-server --file ./yjs-server/Dockerfile ./yjs-server --suppress-logs
           URL=$(gcloud run deploy notes-yjs-server \
             --image gcr.io/$PROJECT_ID/notes-yjs-server \
             --platform managed \
@@ -85,6 +86,7 @@ jobs:
           gcloud builds submit --tag gcr.io/$PROJECT_ID/notes-frontend \
             --build-arg="NEXT_PUBLIC_BACKEND_URL=${{ needs.deploy-backend.outputs.url }}" \
             --build-arg="NEXT_PUBLIC_YJS_WEBSOCKET_URL=$YJS_WSS_URL" \
+            --file ./frontend/Dockerfile \
             ./frontend
           
           gcloud run deploy notes-frontend \
