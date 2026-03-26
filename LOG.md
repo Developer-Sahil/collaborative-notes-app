@@ -105,10 +105,14 @@
     - Stripped placeholder anchor links from the `Landing Page` (`features`, `privacy`, `twitter`) to ensure a completely professional, production-ready aesthetic.
 
 ## [2026-03-26]
-- **Cloud Environment Verification**:
-    - Identified local `gcloud` permission issue (`AUTH_PERMISSION_DENIED`).
-    - **Final Cleanup & Verification**:
-    - Removed redundant local service account keys (`firebase-key.json`) in favor of GCP Secret Manager.
-    - Purged legacy log files (`backend.log`, `build.log`) and verification scripts.
-    - Created a final, high-fidelity deployment artifact for the user.
-    - Updated `README.md` and `LOG.md` for project handoff.
+- **Full-Stack Deployment Automation**:
+    - Finalized a unified **GitHub Actions CI/CD pipeline** (`deploy-all.yml`) that builds and deploys **Frontend (Next.js)**, **Backend (FastAPI)**, and **Yjs Server (Node.js)** in parallel.
+    - Switched from raw `gcloud` commands to [google-github-actions/deploy-cloudrun] for higher stability and better IAM handling.
+    - Integrated **Secret Manager** volume mounting (`/app/secrets/firebase-key.json`) for the FastAPI backend, resolving startup-level security issues.
+    - Refactored `Backend` initialization logic (`core/config.py`, `core/firebase.py`) to natively support mounted secret files, eliminating the need for scattered environment variables.
+    - Configured dynamic build-time injection of service URLs into the Frontend container to ensure proper inter-service communication.
+- **Infrastructure Hardening**:
+    - Resolved widespread IAM permission issues (`Storage Admin`, `Artifact Registry Admin`, `Service Usage Consumer`, `Secret Manager Secret Accessor`).
+    - Standardized service deployments in the `us-central1` region on **Google Cloud Run**.
+    - Enabled `suppress-logs` and direct directory context (`cd`) in build scripts to bypass runner-level log streaming limitations.
+    鼓

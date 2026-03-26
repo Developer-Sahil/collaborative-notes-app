@@ -42,4 +42,15 @@ The project currently relies on manual verification scripts (`verify_*_script.py
 ### 7. Performance & Developer Experience (DX) 🔄 [PARTIAL]
 - **Editor Auto-save**: The 5-second auto-save debounce was decoupled from editor changes.
   - *Action*: Refactored `Editor.tsx` to debounce using TipTap's native `"update"` event listener, freeing up React cycles mapping `getHTML()`.
-- **Logging**: Implement a centralized logging system (like Winston for Node or Loguru for Python) to better track errors across the micro-services.
+### 8. Cloud-Native Automation & Deployment ✅ [RESOLVED]
+- **Unified CI/CD**: Manual deployments were prone to environment drift and configuration errors.
+    - *Action*: Implemented a robust GitHub Actions workflow (`deploy-all.yml`) for parallel service deployment to Google Cloud Run.
+- **Service-to-Service Communication**: Service URLs were previously hardcoded or manual.
+    - *Action*: Configured dynamic build-time injection for the Frontend and output-based URL resolution in the workflow.
+
+### 9. Secret Management & Compliance ✅ [RESOLVED]
+- **Local JSON Keys**: The project initially stored sensitive `firebase-key.json` files in the source tree.
+    - *Action*: Migrated all credentials to **GCP Secret Manager**. Implemented volume mounting in Cloud Run to securely inject secrets without exposing them as environment variables.
+- **IAM Hardening**: Multiple permission gaps (Storage, Artifact Registry, Secret Manager) were identified and bridged during the cloud migration.
+    - *Action*: Documented required IAM roles and standardized the service account permissions across all three micro-services.
+- **Dockerization**: Dockerfiles were optimized (multi-stage for Frontend, slim images for Backend/Yjs) to ensure minimal footprint and fast cold starts on Cloud Run.

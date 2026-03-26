@@ -60,6 +60,27 @@ Public links generate a decoupled `share_token` (so iterating document IDs doesn
 
 ---
 
+
+---
+
+## ☁️ Cloud-Native Deployment & Security Hardening
+
+### 1. Stateless vs. Stateful Deployment
+- **Interview Scenario**: "How did you deploy the WebSocket server vs. the REST API?"
+- **Answer**: I used **Google Cloud Run** for all services. However, while FastAPI and the Next.js Frontend are stateless (perfect for serverless), the Yjs server is **stateful**. 
+- **The Catch**: Cloud Run is technically serverless and scale-to-zero. To prevent users from losing their "current session" state when a container scales down, I configured the Yjs server to maintain active WebSocket connections.
+
+### 2. Secret Management (The "Vault" Pattern)
+- **Problem**: Storing `firebase-key.json` in the git repo or as base64 environment variables is a security risk (and often exceeds character limits).
+- **Solution**: I implemented **GCP Secret Manager**. Instead of environment variables, I used **Volume Mounting**.
+- **How it works**: The secret is mounted as a read-only file at `/app/secrets/firebase-key.json` directly into the container's RAM. The Python backend (`core/firebase.py`) is programmed to check for this file first. This keeps sensitive keys out of the process environment (where they could be leaked via logs or `env` dumps).
+
+### 3. CI/CD with GitHub Actions
+- All three services are deployed in **parallel** using a unified pipeline.
+- Cross-service dependencies (like the Frontend needing the Backend URL) are handled via **GitHub Action Outputs**. The backend deploys first, returns its URL, and that URL is injected as a `--build-arg` into the Frontend's Docker build.
+
+---
+
 ## 📚 Possible Interview Follow-Ups
 
 -   **"How would you handle Redis scaling for Yjs WebSockets?"**
