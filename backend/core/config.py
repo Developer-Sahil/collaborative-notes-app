@@ -1,13 +1,14 @@
 from pydantic_settings import BaseSettings
 from functools import lru_cache
+from typing import Optional
 
 
 class Settings(BaseSettings):
     # Firebase
-    FIREBASE_AUTH_KEY_PATH: str = None  # Path to mounted secret JSON
-    FIREBASE_PROJECT_ID: str = None
-    FIREBASE_PRIVATE_KEY: str = None
-    FIREBASE_CLIENT_EMAIL: str = None
+    FIREBASE_AUTH_KEY_PATH: Optional[str] = None  # Path to mounted secret JSON
+    FIREBASE_PROJECT_ID: Optional[str] = None
+    FIREBASE_PRIVATE_KEY: Optional[str] = None
+    FIREBASE_CLIENT_EMAIL: Optional[str] = None
     
     # API
     API_TITLE: str = "Collaborative Notes API"
