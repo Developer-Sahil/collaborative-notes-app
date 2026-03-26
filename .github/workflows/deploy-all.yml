@@ -77,12 +77,13 @@ jobs:
 
       - name: Build Frontend Image
         run: |
+          gcloud auth configure-docker gcr.io --quiet
           cd frontend
-          gcloud builds submit --tag gcr.io/${{ env.PROJECT_ID }}/notes-frontend \
-            --build-arg="NEXT_PUBLIC_BACKEND_URL=${{ needs.deploy-backend.outputs.url }}" \
-            --build-arg="NEXT_PUBLIC_YJS_WEBSOCKET_URL=${{ steps.prep.outputs.wss_url }}" \
-            . \
-            --suppress-logs
+          docker build -t gcr.io/${{ env.PROJECT_ID }}/notes-frontend \
+            --build-arg NEXT_PUBLIC_BACKEND_URL="${{ needs.deploy-backend.outputs.url }}" \
+            --build-arg NEXT_PUBLIC_YJS_WEBSOCKET_URL="${{ steps.prep.outputs.wss_url }}" \
+            .
+          docker push gcr.io/${{ env.PROJECT_ID }}/notes-frontend
 
       - name: Deploy Frontend
         uses: 'google-github-actions/deploy-cloudrun@v2'
