@@ -114,5 +114,11 @@
 - **Infrastructure Hardening**:
     - Resolved widespread IAM permission issues (`Storage Admin`, `Artifact Registry Admin`, `Service Usage Consumer`, `Secret Manager Secret Accessor`).
     - Standardized service deployments in the `us-central1` region on **Google Cloud Run**.
-    - Enabled `suppress-logs` and direct directory context (`cd`) in build scripts to bypass runner-level log streaming limitations.
-    鼓
+- **Frontend Migration to Vercel**:
+    - Migrated frontend from Cloud Run (Docker) to **Vercel** to avoid multi-stage Docker ARG complexity with Next.js.
+    - Configured all `NEXT_PUBLIC_*` environment variables directly in the Vercel dashboard.
+    - Added `export const dynamic = 'force-dynamic'` to all Firebase-dependent pages to prevent build-time pre-render crashes.
+- **🚀 PRODUCTION LIVE**:
+    - Backend: `https://notes-backend-xarsj3mzga-uc.a.run.app` — Health check verified `{"status":"healthy"}`.
+    - Yjs Server: `https://notes-yjs-server-xarsj3mzga-uc.a.run.app` — Deployed and active.
+    - Frontend: Deployed on Vercel with all environment variables configured.

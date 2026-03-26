@@ -2,7 +2,7 @@ import axios, { AxiosInstance } from "axios";
 import { auth } from "./firebase";
 import { Note } from "./types";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL || process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
 class ApiClient {
   private client: AxiosInstance;
