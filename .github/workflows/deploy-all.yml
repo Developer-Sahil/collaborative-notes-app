@@ -79,7 +79,8 @@ jobs:
         run: |
           gcloud auth configure-docker gcr.io --quiet
           cd frontend
-          docker build -t gcr.io/${{ env.PROJECT_ID }}/notes-frontend \
+          docker build --no-cache --progress=plain \
+            -t gcr.io/${{ env.PROJECT_ID }}/notes-frontend \
             --build-arg NEXT_PUBLIC_BACKEND_URL="${{ needs.deploy-backend.outputs.url }}" \
             --build-arg NEXT_PUBLIC_YJS_WEBSOCKET_URL="${{ steps.prep.outputs.wss_url }}" \
             .
