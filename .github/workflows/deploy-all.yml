@@ -84,4 +84,4 @@ jobs:
           flags: |
             --allow-unauthenticated
             --port=3000
-            --set-build-vars="NEXT_PUBLIC_BACKEND_URL=${{ needs.deploy-backend.outputs.url }},NEXT_PUBLIC_YJS_WEBSOCKET_URL=${{ steps.prep.outputs.wss_url }}"
+            --set-build-env-vars="NEXT_PUBLIC_BACKEND_URL=${{ needs.deploy-backend.outputs.url }},NEXT_PUBLIC_YJS_WEBSOCKET_URL=${{ steps.prep.outputs.wss_url }}"
