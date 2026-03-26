@@ -36,7 +36,7 @@ jobs:
             --platform managed \
             --region $REGION \
             --allow-unauthenticated \
-            --set-secrets="/app/secrets/firebase-key.json=YOUR_SECRET_NAME:latest" \
+            --set-secrets="/app/secrets/firebase-key.json=firebase-credentials:latest" \
             --set-env-vars="FIREBASE_AUTH_KEY_PATH=/app/secrets/firebase-key.json" \
             --format='value(status.url)')
           echo "url=$URL" >> $GITHUB_OUTPUT
