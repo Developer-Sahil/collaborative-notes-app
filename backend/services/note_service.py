@@ -11,6 +11,9 @@ class NoteService:
     def __init__(self):
         self.db = firebase_manager.get_db()
         self.collection = "notes"
+        if self.db is None:
+            import logging
+            logging.error("Database client is not initialized!")
     
     def create_note(self, note: NoteCreate, user_id: str) -> dict:
         """Create a new note"""
